@@ -1,8 +1,15 @@
 #ifndef gamestate_h
 #define gamestate_h
 
+#include "grid.h"
+#include "snake.h"
+
 typedef struct {
-    int x, y;
+    Grid grid;
+    Snake snake;
 } GameState;
+
+GameState MakeGameState(Color gridBase, Pos snakePos);
+void FreeGameState(GameState *gs);
 
 #endif // !gamestate_h

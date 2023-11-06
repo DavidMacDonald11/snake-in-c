@@ -15,7 +15,7 @@ long long getNanoTime() {
 
 int main(int argc, char* args[]) {
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_Window *window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+    SDL_Window *window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 480, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     SDL_Event event;
@@ -27,7 +27,9 @@ int main(int argc, char* args[]) {
     long long lastTime = getNanoTime();
     double delta = 0;
 
-    GameState gs = {.x = 10, .y = 10};
+    Color gridBase = {.r=30, .g=30, .b=30, .a=255};
+    Pos snakePos = {.x=24, .y=24};
+    GameState gs = MakeGameState(gridBase, snakePos);
 
     while(running) {
         while(SDL_PollEvent(&event)) {
@@ -51,6 +53,7 @@ int main(int argc, char* args[]) {
         SDL_RenderPresent(renderer);
     }
 
+    FreeGameState(&gs);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
