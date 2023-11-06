@@ -1,4 +1,5 @@
 CC := clang -Wall
+ARGS := -lSDL2main -lSDL2
 
 SRC := src
 OUT := out
@@ -41,7 +42,7 @@ infoLink:
 
 $(EXE): $(OBJS) | infoLink
 	$(info $@)
-	@$(CC) $^ -o $@
+	@$(CC) $^ -o $@ $(ARGS)
 
 $(OBJS): $@ | infoBuild
 
