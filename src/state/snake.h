@@ -5,16 +5,25 @@
 #include "grid.h"
 
 typedef struct segment {
-    Pos p;
+    Pos pos;
     struct segment *next;
 } Segment;
+
+typedef enum {
+    SnakeDir_Up,
+    SnakeDir_Down,
+    SnakeDir_Left,
+    SnakeDir_Right
+} SnakeDir;
 
 typedef struct {
     Segment *head, *tail;
 } Snake;
 
 Snake MakeSnake(Pos p);
-void SetSnakeInGrid(Snake s, Grid *grid);
-void KillSnake(Snake s);
+void AddSegment(Snake *s);
+void RenderSnake(Snake *s, Grid *grid);
+void MoveSnake(Snake *s, SnakeDir dir);
+void FreeSnake(Snake *s);
 
 #endif // !snake_h

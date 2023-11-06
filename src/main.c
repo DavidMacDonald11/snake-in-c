@@ -1,5 +1,6 @@
 #include "state/gamestate.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
@@ -33,8 +34,13 @@ int main(int argc, char* args[]) {
 
     while(running) {
         while(SDL_PollEvent(&event)) {
-            if(event.type == SDL_QUIT) {
+            switch(event.type) {
+            case SDL_QUIT:
                 running = false;
+                break;
+            case SDL_KEYDOWN:
+                gs.lastKeyPressed = event.key.keysym.sym;
+                break;
             }
         }
 

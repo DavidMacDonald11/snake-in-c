@@ -12,6 +12,7 @@ typedef struct {
 } Grid;
 
 Grid MakeGrid(Color base);
+void ResetGrid(Grid *grid);
 void RenderGrid(SDL_Renderer *renderer, Grid *grid);
 
 #endif // !grid_h

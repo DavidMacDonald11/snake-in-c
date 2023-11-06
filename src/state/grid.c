@@ -3,14 +3,16 @@
 
 Grid MakeGrid(Color base) {
     Grid grid = {.base=base};
+    ResetGrid(&grid);
+    return grid;
+}
 
+void ResetGrid(Grid *grid) {
     for(int i = 0; i < GRID_SIZE; i++) {
         for(int j = 0; j < GRID_SIZE; j++) {
-            grid.grid[i][j] = base;
+            grid->grid[i][j] = grid->base;
         }
     }
-
-    return grid;
 }
 
 void RenderGrid(SDL_Renderer *renderer, Grid *grid) {

@@ -4,21 +4,60 @@
 
 Snake MakeSnake(Pos p) {
     Segment *head = malloc(sizeof(Segment));
-    head->p = p;
+    head->pos = p;
     head->next = NULL;
 
     return (Snake){.head=head, .tail=head};
 }
 
-void SetSnakeInGrid(Snake s, Grid *grid) {
-    Color headColor = {.r=255, .g=255, .b=100, .a=255};
+void AddSegment(Snake *s) {
+    Segment *segment = malloc(sizeof(Segment));
+    segment->pos = s->tail->pos;
+    segment->next = NULL;
 
-    Pos p = s.head->p;
-    grid->grid[p.x][p.y] = headColor;
+    s->tail = s->tail->next = segment;
 }
 
-void KillSnake(Snake s) {
-    Segment *ptr = s.head;
+void RenderSnake(Snake *s, Grid *grid) {
+    Color headColor = {.r=255, .g=255, .b=100, .a=255};
+    Color bodyColor = {.r=255, .g=255, .b=255, .a=255};
+
+    Pos p = s->head->pos;
+    grid->grid[p.x][p.y] = headColor;
+
+    for(Segment *ptr = s->head->next; ptr; ptr = ptr->next) {
+        p = ptr->pos;
+        grid->grid[p.x][p.y] = bodyColor;
+    }
+}
+
+void MoveSnake(Snake *s, SnakeDir dir) {
+    Pos *pos = &s->head->pos;
+    Pos lastPos = *pos;
+
+    switch(dir) {
+    case SnakeDir_Up:
+        pos->y--;
+        break;
+    case SnakeDir_Down:
+        pos->y++;
+        break;
+    case SnakeDir_Left:
+        pos->x--;
+        break;
+    case SnakeDir_Right:
+        pos->x++;
+    }
+
+    for(Segment *ptr = s->head->next; ptr; ptr = ptr->next) {
+        Pos tmp = ptr->pos;
+        ptr->pos = lastPos;
+        lastPos = tmp;
+    }
+}
+
+void FreeSnake(Snake *s) {
+    Segment *ptr = s->head;
 
     while(ptr) {
         Segment *tmp = ptr->next;
