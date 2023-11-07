@@ -1,30 +1,55 @@
+#include "state/apple.h"
 #include "state/gamestate.h"
+#include "state/grid.h"
 #include "state/snake.h"
+#include "util/color.h"
 #include <SDL2/SDL_keycode.h>
 
 void tick(GameState *gs) {
-    static int ticks = 0;
+    static int score = 0;
+    static Pos p = {.x=0, .y=0};
 
-    SnakeDir dir;
+    if(!gs->running) {
+        if(score > 0) {
+            gs->grid.grid[p.x][p.y] = (Color){.r=255, .g=255, .b=0, .a=255};
 
-    switch(gs->lastKeyPressed) {
-    case SDLK_UP:
-        dir = SnakeDir_Up;
-        break;
-    case SDLK_DOWN:
-        dir = SnakeDir_Down;
-        break;
-    case SDLK_LEFT:
-        dir = SnakeDir_Left;
-        break;
-    case SDLK_RIGHT:
-        dir = SnakeDir_Right;
-        break;
+            score -= 10;
+            p.x++;
+
+            if(p.x == GRID_SIZE) {
+                p.y++;
+                p.x = 0;
+            }
+        }
+
+        if(gs->lastKeyPressed == SDLK_RETURN) {
+            ResetGame(gs);
+            score = 0;
+            p = (Pos){.x=0, .y=0};
+        }
+
+        return;
     }
 
-    if(ticks++ > 30) {
+    if(MoveSnake(&gs->snake, GetSnakeDirection(gs))) {
+        StopGame(gs);
+        return;
+    }
+
+    if(SnakeInsideItself(&gs->snake)) {
+        StopGame(gs);
+        return;
+    }
+
+    if(SnakeHitApple(gs)) {
         AddSegment(&gs->snake);
-        MoveSnake(&gs->snake, dir);
-        ticks = 0;
+        score += 10;
+
+        if(gs->snake.len == GRID_SIZE * GRID_SIZE) {
+            StopGame(gs);
+            return;
+        }
+
+        gs->apple = MakeApple(&gs->snake);
     }
 }

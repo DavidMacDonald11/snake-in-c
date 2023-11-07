@@ -3,6 +3,7 @@
 
 #include "../util/pos.h"
 #include "grid.h"
+#include <stdbool.h>
 
 typedef struct segment {
     Pos pos;
@@ -17,13 +18,17 @@ typedef enum {
 } SnakeDir;
 
 typedef struct {
+    int len;
+    SnakeDir lastDir;
     Segment *head, *tail;
 } Snake;
 
 Snake MakeSnake(Pos p);
 void AddSegment(Snake *s);
 void RenderSnake(Snake *s, Grid *grid);
-void MoveSnake(Snake *s, SnakeDir dir);
+bool MoveSnake(Snake *s, SnakeDir dir);
+bool PosInSnake(Snake *s, Pos pos);
+bool SnakeInsideItself(Snake *s);
 void FreeSnake(Snake *s);
 
 #endif // !snake_h

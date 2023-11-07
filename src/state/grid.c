@@ -1,7 +1,8 @@
 #include "grid.h"
 #include <SDL2/SDL_render.h>
 
-Grid MakeGrid(Color base) {
+Grid MakeGrid() {
+    Color base = {.r=30, .g=30, .b=30, .a=255};
     Grid grid = {.base=base};
     ResetGrid(&grid);
     return grid;

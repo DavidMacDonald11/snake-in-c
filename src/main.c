@@ -3,6 +3,7 @@
 #include <SDL2/SDL_events.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <time.h>
 
 void tick(GameState *);
@@ -15,6 +16,8 @@ long long getNanoTime() {
 }
 
 int main(int argc, char* args[]) {
+    srand(time(NULL));
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 480, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -22,15 +25,14 @@ int main(int argc, char* args[]) {
     SDL_Event event;
     bool running = true;
 
-    const int ticksPerSec = 60;
+    const int ticksPerSec = 5;
     const double ns = 1000000000.0 / ticksPerSec;
 
     long long lastTime = getNanoTime();
     double delta = 0;
 
     Color gridBase = {.r=30, .g=30, .b=30, .a=255};
-    Pos snakePos = {.x=24, .y=24};
-    GameState gs = MakeGameState(gridBase, snakePos);
+    GameState gs = MakeGameState(gridBase);
 
     while(running) {
         while(SDL_PollEvent(&event)) {

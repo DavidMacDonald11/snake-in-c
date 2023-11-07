@@ -11,7 +11,7 @@ typedef struct {
     Color grid[GRID_SIZE][GRID_SIZE];
 } Grid;
 
-Grid MakeGrid(Color base);
+Grid MakeGrid();
 void ResetGrid(Grid *grid);
 void RenderGrid(SDL_Renderer *renderer, Grid *grid);
 
