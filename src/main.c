@@ -31,8 +31,7 @@ int main(int argc, char* args[]) {
     long long lastTime = getNanoTime();
     double delta = 0;
 
-    Color gridBase = {.r=30, .g=30, .b=30, .a=255};
-    GameState gs = MakeGameState(gridBase);
+    GameState gs = MakeGameState();
 
     while(running) {
         while(SDL_PollEvent(&event)) {
